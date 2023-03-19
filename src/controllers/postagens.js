@@ -61,4 +61,33 @@ const curtir = async (req, res) => {
     }
 }
 
-module.exports = { cadastrarPostagem, curtir }
+const comentar = async (req, res) => {
+    const { id } = req.usuario;
+    const { postagemId } = req.params;
+    const { texto } = req.body;
+
+    if (!texto) {
+        return res.status(400).json({ message: "É obrigatório informar o texto para comentar" });
+    }
+
+    try {
+        const postagem = await knex('postagens').where({ id: postagemId }).first();
+
+        if (!postagem) {
+            return res.status(404).json({ message: "Postagem não encontrada" });
+        }
+
+        const comentario = await knex('postagem_comentarios').insert({ texto, postagem_id: postagem.id, usuario_id: id });
+
+        if (!comentario) {
+            return res.status(400).json({ message: "Não foi possível comentar a postagem" });
+        }
+
+        return res.status(200).json({ message: "Postagem comentada com sucesso" });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+
+}
+
+module.exports = { cadastrarPostagem, curtir, comentar }
