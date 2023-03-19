@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const usuarios = require('../controllers/usuarios');
 const login = require('../controllers/login');
+const postagens = require('../controllers/postagens');
 const verificaToken = require('../middlewares/verificaToken');
 
 const rotas = Router();
@@ -19,7 +20,7 @@ rotas.get('/perfil', usuarios.obeterperfil);
 rotas.put('/perfil', usuarios.atualizarPerfil);
 
 //postagens 
-
+rotas.post('/postagens', postagens.cadastrarPostagem);
 
 
 module.exports = rotas;
