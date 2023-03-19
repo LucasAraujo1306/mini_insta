@@ -37,4 +37,8 @@ const cadastrarUsuario = async (req, res) => {
 
 }
 
-module.exports = { cadastrarUsuario }
+const obeterperfil = async (req, res) => {
+    return res.json({ usuario: req.usuario });
+}
+
+module.exports = { cadastrarUsuario, obeterperfil }

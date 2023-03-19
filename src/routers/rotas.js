@@ -15,7 +15,7 @@ rotas.post('/login', login);
 rotas.use(verificaToken);
 
 //obter e atualizar perfil
-//rotas.get('/perfil', usuarios.obeterperfil);
+rotas.get('/perfil', usuarios.obeterperfil);
 //rotas.put('/perfil', usuarios.atualizarPerfil);
 
 //postagens 
