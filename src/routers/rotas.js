@@ -12,7 +12,7 @@ rotas.get('/', (req, res) => {
 //rotas.post('/usuarios', usuarios.cadastrarUsuario);
 
 //login
-//rotas.post('/login', login.login);
+rotas.post('/login', login);
 
 //filtro para verificar token do usuario logado
 rotas.use(verificaToken);
