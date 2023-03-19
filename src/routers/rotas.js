@@ -5,11 +5,8 @@ const verificaToken = require('../middlewares/verificaToken');
 
 const rotas = Router();
 
-rotas.get('/', (req, res) => {
-    res.json({ message: 'API is running' });
-})
 //cadastrar usuario
-//rotas.post('/usuarios', usuarios.cadastrarUsuario);
+rotas.post('/usuarios', usuarios.cadastrarUsuario);
 
 //login
 rotas.post('/login', login);
