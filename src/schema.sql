@@ -13,6 +13,7 @@ id serial primary key,
   senha varchar(50) not null,
   verificado boolean default false
 );
+CREATE INDEX idx_username ON usuarios (username)
 
 CREATE INDEX idx_email ON usuarios (email)
 
