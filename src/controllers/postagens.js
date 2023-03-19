@@ -32,6 +32,33 @@ const cadastrarPostagem = async (req, res) => {
     }
 }
 
+const curtir = async (req, res) => {
+    const { id } = req.usuario;
+    const { postagemId } = req.params;
 
+    try {
+        const postagem = await knex('postagens').where({ id: postagemId }).first();
 
-module.exports = { cadastrarPostagem }
+        if (!postagem) {
+            return res.status(404).json({ message: "Postagem não encontrada" });
+        }
+
+        const curtida = await knex('postagem_curtidas').where({ postagem_id: postagem.id, usuario_id: id }).first();
+
+        if (curtida) {
+            return res.status(400).json({ message: "Postagem já curtida" });
+        }
+
+        const curtidaCadastrada = await knex('postagem_curtidas').insert({ postagem_id: postagemId, usuario_id: id });
+
+        if (!curtidaCadastrada) {
+            return res.status(400).json({ message: "Não foi possível curtir a postagem" });
+        }
+
+        return res.status(200).json({ message: "Postagem curtida com sucesso" });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+module.exports = { cadastrarPostagem, curtir }
