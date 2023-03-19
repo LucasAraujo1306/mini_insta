@@ -1,6 +1,7 @@
 const knex = require('../connections/conexao')
 const bcrypt = require('bcrypt')
 
+
 const cadastrarUsuario = async (req, res) => {
     const { username, senha } = req.body
 
@@ -8,15 +9,23 @@ const cadastrarUsuario = async (req, res) => {
         return res.status(400).json({ message: 'É obrigatório usuario e senha' });
     }
 
+    if (username.length > 70) {
+        return res.status(400).json({ message: 'O nome de usuario deve ter no máximo 70 caracteres' });
+    }
+
     if (senha.length < 6) {
         return res.status(400).json({ message: 'A senha deve ter no mínimo 6 caracteres' });
+    }
+
+    if (senha.length > 50) {
+        return res.status(400).json({ message: 'A senha deve ter no máximo 50 caracteres' });
     }
 
     try {
         const usuarioExiste = await knex('usuarios').where({ username }).first();
 
-        if (!usuarioExiste) {
-            return res.status(401).json({ message: 'Não autorizado' });
+        if (usuarioExiste) {
+            return res.status(401).json({ message: 'Usuário indisponível' });
         }
 
         const senhaCriptografada = await bcrypt.hash(senha, 10);
@@ -52,6 +61,10 @@ const atualizarPerfil = async (req, res) => {
         if (senha) {
             if (senha.length < 6) {
                 return res.status(400).json({ message: 'A senha deve ter no mínimo 6 caracteres' });
+            }
+
+            if (senha.length > 50) {
+                return res.status(400).json({ message: 'A senha deve ter no máximo 50 caracteres' });
             }
             senha = await bcrypt.hash(senha, 10);
         }

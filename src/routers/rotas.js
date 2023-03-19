@@ -7,7 +7,7 @@ const verificaToken = require('../middlewares/verificaToken');
 const rotas = Router();
 
 //cadastrar usuario
-rotas.post('/usuarios', usuarios.cadastrarUsuario);
+rotas.post('/cadastro', usuarios.cadastrarUsuario);
 
 //login
 rotas.post('/login', login);
@@ -21,8 +21,10 @@ rotas.put('/perfil', usuarios.atualizarPerfil);
 
 //postagens 
 rotas.post('/postagens', postagens.cadastrarPostagem);
+rotas.get('/postagens', postagens.feed);
 rotas.post('/postagens/:postagemId/curtir', postagens.curtir);
 rotas.post('/postagens/:postagemId/comentar', postagens.comentar);
+
 
 
 module.exports = rotas;

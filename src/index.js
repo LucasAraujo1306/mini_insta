@@ -1,10 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
+require('dotenv').config();
 
 const rotas = require('./routers/rotas');
-dotenv.config();
-
 
 const app = express();
 

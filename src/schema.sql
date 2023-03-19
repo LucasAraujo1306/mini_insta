@@ -21,7 +21,7 @@ id serial primary key,
   bio varchar(200),
   telefone varchar(20),
   genero varchar(20),
-  senha varchar(50) not null,
+  senha text not null,
   verificado boolean default false
 );
 CREATE INDEX idx_username ON usuarios (username)

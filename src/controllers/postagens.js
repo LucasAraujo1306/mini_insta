@@ -90,4 +90,58 @@ const comentar = async (req, res) => {
 
 }
 
-module.exports = { cadastrarPostagem, curtir, comentar }
+const feed = async (req, res) => {
+    const { id } = req.usuario;
+    const { offset } = req.query;
+
+    const pagina = offset ? offset : 0;
+
+    try {
+        const postagens = await knex('postagens')
+            .where('usuario_id', '!==', id)
+            .limit(10)
+            .offset(pagina)
+            .orderBy('data_criacao', 'desc');
+
+        if (postagens.length === 0) {
+            return res.status(200).json(postagens);
+        }
+
+        for (const postagem of postagens) {
+            //usuario
+            const usuario = await knex('usuarios')
+                .where({ id: postagem.usuario_id })
+                .select('imagem', 'username', 'verificado')
+                .first();
+            postagem.usuario = usuario;
+
+            //fotos
+            const fotos = await knex('postagem_fotos')
+                .where({ postagem_id: postagem.id })
+                .select('imagem');
+            postagem.fotos = fotos;
+
+            //curtidas
+            const curtida = await knex('postagem_curtidas')
+                .where({ postagem_id: postagem.id })
+                .select('usuario_id');
+            postagem.curtida = curtida.length;
+
+            //curtido por mim
+            postagem.curtidoPorMin = curtida.find(c => c.usuario_id === id) ? true : false;
+
+            //comentarios
+            const comentarios = await knex('postagem_comentarios')
+                .leftJoin('usuarios', 'postagem_comentarios.usuario_id', 'usuarios.id')
+                .where({ postagem_id: postagem.id })
+                .select('usuarios.username', 'postagem_comentarios.texto');
+            postagem.comentarios = comentarios;
+        }
+        return res.json(postagens)
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+
+}
+
+module.exports = { cadastrarPostagem, curtir, comentar, feed }

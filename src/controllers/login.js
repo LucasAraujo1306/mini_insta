@@ -1,6 +1,8 @@
 const knex = require('../connections/conexao')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
+
 const Hash = process.env.PASSWORD_HASH
 
 const login = async (req, res) => {
